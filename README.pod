@@ -1,0 +1,51 @@
+=head1 NAME
+
+Iroha - Cheapy O.R.Mapper
+
+=head1 SYNOPSIS
+
+  use Iroha;
+  
+  # Connect to database
+  my $c = Iroha->connect( 'dbi:...', 'user', 'pass' );
+  
+  # Insert into member table
+  my $row = $c->insert( member => { name => 'foobar', ... } );
+  
+  # Select rows from member table
+  my @rows = $c->select( member => { area => 'Japan', ... }, { limit => 3 } );
+  
+  # Fetch a row with id=3 from member table 
+  my $row = $c->fetch( member => 3 );
+  
+  # Update member's name and age
+  $row->update( name => 'piyopiyo', age => 19 );
+  
+  # Get values from fields
+  my ( $name, $age ) = $row->cols( qw( name age ) );
+  
+  # Delete member
+  $row->delete;
+
+=head1 DESCRIPTION
+
+Iroha is cheapy Object-Relational-Mapper
+
+=head1 NOTICE
+
+* Iroha supports UTF-8 charset only.
+
+=head1 AUTHOR
+
+satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
+
+=head1 SEE ALSO
+
+Iroha::Row
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
