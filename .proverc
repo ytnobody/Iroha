@@ -1,0 +1,4 @@
+-I lib
+-I extlib/lib/perl5
+--color
+-v
