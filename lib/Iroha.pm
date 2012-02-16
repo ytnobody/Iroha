@@ -5,7 +5,6 @@ use parent qw( Class::Accessor::Fast );
 use DBIx::Sunny;
 use SQL::Maker;
 use Carp ();
-use Data::Recursive::Encode;
 use Iroha::Row;
 
 our $VERSION = '0.01';
@@ -22,7 +21,6 @@ sub connect {
 
 sub insert {
     my ( $self, $table, $args ) = @_;
-    $args = Data::Recursive::Encode->decode_utf8( $args );
     $self->dbh->query(
         $self->sql->insert( $table, $args )
     );
@@ -32,7 +30,6 @@ sub insert {
 
 sub select {
     my ( $self, $table, $args, $options ) = @_; 
-    $args = Data::Recursive::Encode->decode_utf8( $args );
     my $rows = $self->dbh->select_all(
         $self->sql->select( $table, ['*'], $args, $options )
     );

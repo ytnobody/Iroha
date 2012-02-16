@@ -3,7 +3,6 @@ name 'Iroha';
 all_from 'lib/Iroha.pm';
 
 requires 'Class::Accessor::Fast';
-requires 'Data::Recursive::Encode';
 requires 'DBIx::Sunny';
 requires 'SQL::Maker';
 

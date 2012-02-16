@@ -2,16 +2,7 @@ package Iroha::Row;
 use strict;
 use warnings;
 use parent qw( Class::Accessor::Fast );
-use Data::Recursive::Encode;
-__PACKAGE__->mk_accessors( qw( iroha table ) );
-
-sub row {
-    my ( $self, $data ) = @_;
-    if ( $data ) {
-        $self->{row} = Data::Recursive::Encode->decode_utf8( $data );
-    }
-    return Data::Recursive::Encode->encode_utf8( $self->{row} );
-}
+__PACKAGE__->mk_accessors( qw( iroha table row ) );
 
 sub update {
     my ( $self, %args ) = @_;
