@@ -31,10 +31,6 @@ Iroha - Cheapy O.R.Mapper
 
 Iroha is cheapy Object-Relational-Mapper
 
-=head1 NOTICE
-
-* Iroha supports UTF-8 charset only.
-
 =head1 AUTHOR
 
 satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
