@@ -14,7 +14,7 @@ __PACKAGE__->mk_accessors( qw( dbh sql ) );
 sub connect {
     my ( $class, $dsn, @args ) = @_;
     my $dbh = DBIx::Sunny->connect( $dsn, @args ) or Carp::croak( $DBIx::Sunny::errstr );
-    my ( $driver ) = $dsn =~ /^dbi:(.+?):/;
+    my ( $driver ) = $dsn =~ /^dbi:(.+?):/i;
     my $sql = SQL::Maker->new( { driver => $driver } );
     return $class->new( { sql => $sql, dbh => $dbh } );
 }
