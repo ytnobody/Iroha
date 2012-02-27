@@ -41,6 +41,30 @@ __END__
 
 Iroha::Row - Row Class of Iroha
 
+=head1 METHODS
+
+=head2 update
+
+Update row with specified arguments.
+
+ $row->update( %keyvals );
+
+=head2 delete 
+
+Delete row.
+
+ $row->delete;
+
+=head2 columns
+
+Fetch values from specified columns.
+
+ my @values = $row->columns( @columns );
+
+=head2 cols
+
+Alias of columns().
+
 =head1 AUTHOR
 
 satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
