@@ -50,6 +50,8 @@ sub fetch {
 1;
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 Iroha - Schema-less ORM

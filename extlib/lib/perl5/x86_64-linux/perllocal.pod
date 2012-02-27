@@ -1,0 +1,88 @@
+=head2 Fri Feb 17 15:46:33 2012: C<Module> L<Capture::Tiny|Capture::Tiny>
+
+=over 4
+
+=item *
+
+C<installed into: /home/ytnobody/work/Iroha/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.16>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Feb 17 15:47:10 2012: C<Module> L<Mouse|Mouse>
+
+=over 4
+
+=item *
+
+C<installed into: /home/ytnobody/work/Iroha/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.97>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Feb 17 15:47:13 2012: C<Module> L<Data::Validator|Data::Validator>
+
+=over 4
+
+=item *
+
+C<installed into: /home/ytnobody/work/Iroha/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.09>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Feb 17 15:47:14 2012: C<Module> L<DBIx::Sunny|DBIx::Sunny>
+
+=over 4
+
+=item *
+
+C<installed into: /home/ytnobody/work/Iroha/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.15>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

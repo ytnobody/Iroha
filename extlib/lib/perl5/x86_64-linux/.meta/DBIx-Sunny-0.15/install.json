@@ -1,0 +1,1 @@
+{"provides":{"DBIx::Sunny::db":{"file":"DBIx/Sunny.pm"},"DBIx::Sunny::st":{"file":"DBIx/Sunny.pm"},"DBIx::Sunny":{"version":"0.15","file":"DBIx/Sunny.pm"},"DBIx::Sunny::Schema":{"file":"DBIx/Sunny/Schema.pm"}},"version":"0.15","name":"DBIx::Sunny","dist":"DBIx-Sunny-0.15","pathname":"K/KA/KAZEBURO/DBIx-Sunny-0.15.tar.gz","module":"DBIx::Sunny"}
