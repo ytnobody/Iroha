@@ -8,3 +8,5 @@ __DATA__
 satoshi azuma
 ytnobody at gmail dot com
 Iroha
+Cheapy
+cheapy
