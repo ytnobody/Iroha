@@ -90,4 +90,10 @@ for my $key ( keys %dsn ) {
 
 }
 
+subtest connection_failure => sub {
+    my $iroha = eval { Iroha->connect( 'dbi:mysql:hoge', 'foofoo', undef ) };
+    ok ! defined $iroha;
+    ok $@ =~ /Access denied/;
+};
+
 done_testing;
