@@ -96,6 +96,32 @@ for my $key ( 'mysql' ) {
         is $c->fetch( member => $id ), undef;
     };
 
+    subtest "query_$key" => sub {
+        my $query = "INSERT INTO member (name, age, datein) VALUES (?,?,?)";
+        ok $c->query( $query, 'Mr. Query', 30, time ), 'Query is okey';
+        my ( $row ) = $c->select( member => { name => 'Mr. Query' } );
+        isa_ok $row, 'Iroha::Row';
+        is $row->f( 'age' ), 30;
+        $row->delete;
+    };
+
+    subtest "transaction_$key" => sub {
+        ok $c->transaction( sub {
+            my $row = insert( member => { name => 'Kaiji', age => 28, datein => time } ) or rollback();
+            $row->delete;
+        } ), 'transaction OK';
+        ok ! $c->transaction( sub {
+            my $akagi = insert( member => { name => 'Akagi', age => 26, datein => time } ) or rollback();
+            my $hirayama = insert( member => { name => 'Hirayama', age => 25, datein => time } ) or rollback();
+            $hirayama->update( name => 'Akagi' );
+            if ( $akagi->f('name') eq $hirayama->f('name') ) {
+                rollback();
+            }
+        } ), 'transaction rollbacked';
+        my ( $hirayama ) = $c->select( member => { name => 'Hirayama' } );
+        is $hirayama, undef;
+    };
+
 }
 
 subtest connection_failure => sub {

@@ -4,6 +4,13 @@ use warnings;
 use parent qw( Class::Accessor::Fast );
 __PACKAGE__->mk_accessors( qw( iroha table row ) );
 
+BEGIN {
+    no strict 'refs';
+    for my $key ( qw( cols col fields attr f ) ) {
+        *{__PACKAGE__."\::$key"} = sub { shift->columns( @_ ) };
+    }
+}
+
 sub update {
     my ( $self, %args ) = @_;
     my $iroha = $self->iroha;
@@ -27,10 +34,6 @@ sub columns {
     my ( $self, @cols ) = @_;
     my %data = %{ $self->row };
     return @cols ? @data{@cols} : %data;
-}
-
-sub cols {
-    shift->columns( @_ );
 }
 
 1;
@@ -61,7 +64,7 @@ Fetch values from specified columns.
 
  my @values = $row->columns( @columns );
 
-=head2 cols
+=head2 cols, col, fields, attr, f
 
 Alias of columns().
 

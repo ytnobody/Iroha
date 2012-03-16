@@ -6,8 +6,10 @@ use DBIx::Sunny;
 use SQL::Maker;
 use Carp ();
 use Iroha::Row;
+use Guard ();
 
 our $VERSION = '0.01';
+our $IROHA;
 
 __PACKAGE__->mk_accessors( qw( dbh sql ) );
 
@@ -45,6 +47,82 @@ sub fetch {
         $self->sql->select( $table, ['*'], { id => $id } )
     );
     return $row ? Iroha::Row->new( { row => $row, iroha => $self, table => $table } ) : undef;
+}
+
+sub query {
+    my ( $self, $sql, @binds ) = @_;
+    return $self->dbh->query( $sql, @binds );
+}
+
+sub transaction {
+    my ( $self, $code ) = @_;
+
+    no warnings 'redefine';
+    no strict 'refs';
+
+    my $caller = caller;
+    local $IROHA = $self;
+
+    local *{$caller."\::insert"} = sub {
+        my $self = $IROHA;
+        my ( $table, $args ) = @_;
+        $self->dbh->query(
+            $self->sql->insert( $table, $args )
+        );
+        my ( $row ) = $self->select( $table => $args );
+        return $row;
+    };
+
+    local *{$caller."\::select"} = sub {
+        my $self = $IROHA;
+        my ( $table, $args, $options ) = @_;
+        my $rows = $self->dbh->select_all(
+            $self->sql->select( $table, ['*'], $args, $options )
+        );
+        return grep { defined $_ } 
+               map { $_ ? Iroha::Row->new( { row => $_, iroha => $self, table => $table } ) : undef } 
+               @$rows
+        ;
+    };
+
+    local *{$caller."\::fetch"} = sub {
+        my $self = $IROHA;
+        my ( $table, $id ) = @_;
+        my $row = $self->dbh->select_row(
+            $self->sql->select( $table, ['*'], { id => $id } )
+        );
+        return $row ? Iroha::Row->new( { row => $row, iroha => $self, table => $table } ) : undef;
+    };
+
+    local *{$caller."\::query"} = sub {
+        my $self = $IROHA;
+        my ( $sql, @binds ) = @_;
+        return $self->dbh->query( $sql, @binds );
+    };
+
+    local *{$caller."\::dbh"} = sub {
+        return $IROHA->{dbh};
+    };
+
+    local *{$caller."\::rollback"} = sub { 
+        $IROHA->dbh->rollback ;
+        die "ROLLBACK";
+    };
+
+    my $auto_commit = $IROHA->dbh->{AutoCommit};
+    $IROHA->dbh->{AutoCommit} = 0;
+
+    my $guard = Guard::guard {
+        $IROHA->dbh->commit;
+        $IROHA->dbh->{AutoCommit} = $auto_commit;
+    };
+
+    eval { $code->() };
+    if ( $@ ) {
+        Carp::carp( "transaction: ". $@ );
+        return;
+    }
+    return 1;
 }
 
 1;
