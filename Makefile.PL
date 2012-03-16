@@ -5,6 +5,7 @@ all_from 'lib/Iroha.pm';
 requires 'Class::Accessor::Fast';
 requires 'DBIx::Sunny';
 requires 'SQL::Maker';
+requires 'Guard';
 
 tests 't/*.t';
 
