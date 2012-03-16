@@ -76,8 +76,8 @@ sub transaction {
     local *{$caller."\::search"} = sub {
         my $self = $IROHA;
         my ( $table, $args, $options ) = @_;
-        my $rows = $self->dbh->search_all(
-            $self->sql->search( $table, ['*'], $args, $options )
+        my $rows = $self->dbh->select_all(
+            $self->sql->select( $table, ['*'], $args, $options )
         );
         return grep { defined $_ } 
                map { $_ ? Iroha::Row->new( { row => $_, iroha => $self, table => $table } ) : undef } 
@@ -88,8 +88,8 @@ sub transaction {
     local *{$caller."\::fetch"} = sub {
         my $self = $IROHA;
         my ( $table, $id ) = @_;
-        my $row = $self->dbh->search_row(
-            $self->sql->search( $table, ['*'], { id => $id } )
+        my $row = $self->dbh->select_row(
+            $self->sql->select( $table, ['*'], { id => $id } )
         );
         return $row ? Iroha::Row->new( { row => $row, iroha => $self, table => $table } ) : undef;
     };
