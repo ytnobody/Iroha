@@ -1,12 +1,20 @@
 use strict;
-use t::Util;
 use Test::More;
 use Iroha;
 use utf8;
 
+BEGIN {
+    eval { require t::Util::MySQL };
+    if ( $@ ) {
+        plan skip_all => 't::Util::MySQL requires run these tests. We recommend to install Test::mysqld for running this test.';
+    }
+};
+
+use t::Util::MySQL;
+
 my %dsn = dsn();
 
-for my $key ( keys %dsn ) {
+for my $key ( 'mysql' ) {
 
     my $c = Iroha->connect( @{ $dsn{$key} } );
     isa_ok $c, 'Iroha';

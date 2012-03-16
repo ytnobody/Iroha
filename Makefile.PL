@@ -12,7 +12,6 @@ tests 't/*.t';
 # author_tests 'xt';
 
 test_requires 'Test::More';
-test_requires 'Test::mysqld';
 
 ### comment-in it when you want to make it with Module::Install::Repository
 # auto_set_repository;

@@ -1,4 +1,4 @@
-package t::Util;
+package t::Util::MySQL;
 use strict;
 use warnings;
 use File::Spec;
@@ -6,16 +6,6 @@ use DBIx::Sunny;
 use Test::mysqld;
 
 sub import {
-
-    # SQLite
-    {
-        my $sqlfile = File::Spec->catfile( 't', 'tables.sql' );
-        my $dbfile = File::Spec->catfile( 't', 'test.sqlite' );
-        if ( -e $dbfile ) {
-            unlink $dbfile;
-        }
-        `sqlite3 $dbfile < $sqlfile`;
-    }
 
     # MySQL
     my $mysqld = Test::mysqld->new( my_cnf => { 'skip-networking' => '' } );
@@ -38,7 +28,7 @@ sub import {
     no warnings 'redefine';
     
     *{$caller."::dsn"} = sub {
-        return ( sqlite => [ 'dbi:SQLite:t/test.sqlite' ], mysql => [ $mysqld->dsn ] );
+        return ( mysql => [ $mysqld->dsn ] );
     };
 
 }
