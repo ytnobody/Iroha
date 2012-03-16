@@ -50,10 +50,10 @@ for my $key ( 'mysql' ) {
         is_deeply $c->fetch( member => $data->{id} )->row, $data;
     };
 
-    subtest "select_$key" => sub {
+    subtest "search_$key" => sub {
         $c->insert( member => { name => 'ほげ', sex => 'その他' } );
         $c->insert( member => { name => 'ふが', sex => 'その他' } );
-        my @rows = $c->select( member => { sex => 'その他' } );
+        my @rows = $c->search( member => { sex => 'その他' } );
         is scalar @rows, 2;
         for my $row ( @rows ) {
             isa_ok $row, 'Iroha::Row';
@@ -99,7 +99,7 @@ for my $key ( 'mysql' ) {
     subtest "query_$key" => sub {
         my $query = "INSERT INTO member (name, age, datein) VALUES (?,?,?)";
         ok $c->query( $query, 'Mr. Query', 30, time ), 'Query is okey';
-        my ( $row ) = $c->select( member => { name => 'Mr. Query' } );
+        my ( $row ) = $c->search( member => { name => 'Mr. Query' } );
         isa_ok $row, 'Iroha::Row';
         is $row->f( 'age' ), 30;
         $row->delete;
@@ -118,7 +118,7 @@ for my $key ( 'mysql' ) {
                 rollback();
             }
         } ), 'transaction rollbacked';
-        my ( $hirayama ) = $c->select( member => { name => 'Hirayama' } );
+        my ( $hirayama ) = $c->search( member => { name => 'Hirayama' } );
         is $hirayama, undef;
     };
 

@@ -16,7 +16,7 @@ Iroha - Schema-less ORM
   my $row = $c->insert( member => { name => 'おれおれ', ... } );
   
   # Select rows from member table
-  my @rows = $c->select( member => { area => '日本', ... }, { limit => 3 } );
+  my @rows = $c->search( member => { area => '日本', ... }, { limit => 3 } );
   
   # Fetch a row with id=3 from member table 
   my $row = $c->fetch( member => 3 );
@@ -58,11 +58,11 @@ Fetch a row from specified table with specified identification-key.
 
  my $row = $iroha->fetch( $table => $id );
 
-=head2 select
+=head2 search
 
-Select rows from specified table with specified conditions.
+Search rows from specified table with specified conditions.
 
- my @rows = $iroha->select( $table => \%where, \%options );
+ my @rows = $iroha->search( $table => \%where, \%options );
 
 =head2 query
 
@@ -89,7 +89,7 @@ Implementation of transaction as DSL-like.
       }
   } );
 
-You may use insert(), fetch(), select(), query() and dbh() as like as simple function in callback.
+You may use insert(), fetch(), search(), query() and dbh() as like as simple function in callback.
 
 =head1 AUTHOR
 

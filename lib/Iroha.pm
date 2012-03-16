@@ -26,11 +26,11 @@ sub insert {
     $self->dbh->query(
         $self->sql->insert( $table, $args )
     );
-    my ( $row ) = $self->select( $table => $args );
+    my ( $row ) = $self->search( $table => $args );
     return $row;
 }
 
-sub select {
+sub search {
     my ( $self, $table, $args, $options ) = @_; 
     my $rows = $self->dbh->select_all(
         $self->sql->select( $table, ['*'], $args, $options )
@@ -69,15 +69,15 @@ sub transaction {
         $self->dbh->query(
             $self->sql->insert( $table, $args )
         );
-        my ( $row ) = $self->select( $table => $args );
+        my ( $row ) = $self->search( $table => $args );
         return $row;
     };
 
-    local *{$caller."\::select"} = sub {
+    local *{$caller."\::search"} = sub {
         my $self = $IROHA;
         my ( $table, $args, $options ) = @_;
-        my $rows = $self->dbh->select_all(
-            $self->sql->select( $table, ['*'], $args, $options )
+        my $rows = $self->dbh->search_all(
+            $self->sql->search( $table, ['*'], $args, $options )
         );
         return grep { defined $_ } 
                map { $_ ? Iroha::Row->new( { row => $_, iroha => $self, table => $table } ) : undef } 
@@ -88,8 +88,8 @@ sub transaction {
     local *{$caller."\::fetch"} = sub {
         my $self = $IROHA;
         my ( $table, $id ) = @_;
-        my $row = $self->dbh->select_row(
-            $self->sql->select( $table, ['*'], { id => $id } )
+        my $row = $self->dbh->search_row(
+            $self->sql->search( $table, ['*'], { id => $id } )
         );
         return $row ? Iroha::Row->new( { row => $row, iroha => $self, table => $table } ) : undef;
     };
@@ -146,7 +146,7 @@ Iroha - Schema-less ORM
   my $row = $c->insert( member => { name => 'おれおれ', ... } );
   
   # Select rows from member table
-  my @rows = $c->select( member => { area => '日本', ... }, { limit => 3 } );
+  my @rows = $c->search( member => { area => '日本', ... }, { limit => 3 } );
   
   # Fetch a row with id=3 from member table 
   my $row = $c->fetch( member => 3 );
@@ -188,11 +188,11 @@ Fetch a row from specified table with specified identification-key.
 
  my $row = $iroha->fetch( $table => $id );
 
-=head2 select
+=head2 search
 
-Select rows from specified table with specified conditions.
+Search rows from specified table with specified conditions.
 
- my @rows = $iroha->select( $table => \%where, \%options );
+ my @rows = $iroha->search( $table => \%where, \%options );
 
 =head2 query
 
@@ -219,7 +219,7 @@ Implementation of transaction as DSL-like.
       }
   } );
 
-You may use insert(), fetch(), select(), query() and dbh() as like as simple function in callback.
+You may use insert(), fetch(), search(), query() and dbh() as like as simple function in callback.
 
 =head1 AUTHOR
 
