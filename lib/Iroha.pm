@@ -194,6 +194,33 @@ Select rows from specified table with specified conditions.
 
  my @rows = $iroha->select( $table => \%where, \%options );
 
+=head2 query
+
+Prepare and execute in simple method.
+
+ my $is_success = $iroha->query( $sql, @binds );
+
+=head2 dbh
+
+Returns DBH.
+
+ my $dbh = $iroha->dbh;
+
+=head2 transaction
+
+Implementation of transaction as DSL-like.
+
+  my $is_success = $iroha->transaction( sub {
+      my $akagi = insert( member => { name => 'Akagi', age => 26, datein => time } ) or rollback();
+      my $hirayama = insert( member => { name => 'Hirayama', age => 25, datein => time } ) or rollback();
+      $hirayama->update( name => 'Akagi' );
+      if ( $akagi->f('name') eq $hirayama->f('name') ) {
+          rollback();
+      }
+  } );
+
+You may use insert(), fetch(), select(), query() and dbh() as like as simple function in callback.
+
 =head1 AUTHOR
 
 satoshi azuma E<lt>ytnobody at gmail dot comE<gt>
