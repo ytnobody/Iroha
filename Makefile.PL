@@ -7,10 +7,15 @@ requires 'DBIx::Sunny';
 requires 'SQL::Maker';
 
 tests 't/*.t';
-author_tests 'xt';
+
+### comment-in it when you want to run author-test with Module::Install::AuthorTests
+# author_tests 'xt';
 
 test_requires 'Test::More';
 test_requires 'Test::mysqld';
-auto_set_repository;
+
+### comment-in it when you want to make it with Module::Install::Repository
+# auto_set_repository;
+
 auto_include;
 WriteAll;
