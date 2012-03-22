@@ -93,8 +93,23 @@ for my $key ( 'sqlite' ) {
         ok $c->query( $query, 'Mr. Query', 30, time ), 'Query is okey';
         my ( $row ) = $c->search( member => { name => 'Mr. Query' } );
         isa_ok $row, 'Iroha::Row';
-        is $row->f( 'age' ), 30;
+        is $row->age, 30;
+        $row->age( 31 );
+        my $r = $c->fetch( member => $row->id );
+        is $r->age, 31;
         $row->delete;
+    };
+
+    subtest "pull_$key" => sub {
+        my $row1 = $c->insert( member => { name => 'Chang', age => 26, datein => time } );
+        my $row2 = $c->fetch( member => $row1->id );
+        is $row1->name, $row2->name, 'same name as Chang';
+        $row2->name( 'Mitsuyama' );
+        is $row1->name, 'Chang', 'row1 is Chang' ;
+        is $row2->name, 'Mitsuyama', 'row2 is Mitsuyama';
+        $row1->pull;
+        is $row1->name, 'Mitsuyama', 'now, row1 is Mitsuyama';
+        is $row2->name, $row1->name, 'same name as Mitsuyama';
     };
 
     subtest "transaction_$key" => sub {
