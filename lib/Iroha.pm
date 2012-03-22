@@ -23,10 +23,16 @@ sub connect {
 
 sub insert {
     my ( $self, $table, $args ) = @_;
-    $self->dbh->query(
-        $self->sql->insert( $table, $args )
-    );
-    my ( $row ) = $self->search( $table => $args );
+    my $row = defined $args->{id} ? $self->fetch( $table => delete $args->{id} ) : undef ;
+    if ( defined $row ) {
+        $row->update( %$args );
+    }
+    else {
+        $self->dbh->query(
+            $self->sql->insert( $table, $args )
+        );
+        ( $row ) = $self->search( $table => $args );
+    }
     return $row;
 }
 
@@ -153,9 +159,17 @@ Iroha - Schema-less ORM
   
   # Update member's name and age
   $row->update( name => '源義経', age => 17 );
+  # Ah, mistake...
+  $row->age( 19 );
   
   # Get values from fields
   my ( $name, $age ) = $row->cols( qw( name age ) );
+  # or 
+  my $name = $row->name;
+  my $age = $row->age;
+  
+  # Synchronize fields from database
+  $row->pull;
   
   # Delete member
   $row->delete;
@@ -181,6 +195,8 @@ Connect to database with specified arguments.
 Insert into specified table with specified arguments.
 
  my $row = $iroha->insert( $table => $hashref );
+
+If you specified 'id' key in $hashref, it work like as REPLACE.
 
 =head2 fetch 
 
@@ -213,8 +229,8 @@ Implementation of transaction as DSL-like.
   my $is_success = $iroha->transaction( sub {
       my $akagi = insert( member => { name => 'Akagi', age => 26, datein => time } ) or rollback();
       my $hirayama = insert( member => { name => 'Hirayama', age => 25, datein => time } ) or rollback();
-      $hirayama->update( name => 'Akagi' );
-      if ( $akagi->f('name') eq $hirayama->f('name') ) {
+      $hirayama->name( 'Akagi' );
+      if ( $akagi->name eq $hirayama->name ) {
           rollback();
       }
   } );
