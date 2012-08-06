@@ -7,7 +7,7 @@ perl:
 notifications:
   irc:
     channels:
-      - "irc.freenode.net#ytnobody"
+      - "irc.freenode.net#iroha-orm"
     on_success: change
     on_failure: always
 
