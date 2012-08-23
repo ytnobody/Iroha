@@ -14,6 +14,8 @@ tests 't/*.t';
 
 test_requires 'Test::More';
 
+die 'This system is not installed sqlite3' unless can_run( 'sqlite3' );
+
 recommends 'Test::mysqld';
 
 ### comment-in it when you want to make it with Module::Install::Repository
