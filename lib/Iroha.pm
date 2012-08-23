@@ -7,6 +7,7 @@ use SQL::Maker;
 use Carp ();
 use Iroha::Row;
 use Guard ();
+use 5.010000;
 
 our $VERSION = '0.01';
 our $IROHA;
